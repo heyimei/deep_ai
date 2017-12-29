@@ -1,2 +1,3 @@
 # deep_ai
-init repository
+The branch just for create new feature for my own project!
+
