@@ -1,0 +1,64 @@
+hadoop web
+http://192.168.1.108:50070/dfshealth.html#tab-overview
+
+spark:
+scala-2.11.7下载
+
+为了方便，我现在我的SparkMaster主机上先安装，把目录打开到/usr目录下，与我的Java目录相一致。
+
+wget https://downloads.lightbend.com/scala/2.11.7/scala-2.11.7.tgz
+下载之后解压
+
+tar -zxvf scala-2.11.7.tgz
+
+inteliji 
+http://www.jianshu.com/p/200473f264bc
+
+s
+使用方法：hadoop fs -ls <args>
+
+如果是文件，则按照如下格式返回文件信息：
+文件名 <副本数> 文件大小 修改日期 修改时间 权限 用户ID 组ID 
+如果是目录，则返回它直接子文件的一个列表，就像在Unix中一样。目录返回列表的信息如下：
+目录名 <dir> 修改日期 修改时间 权限 用户ID 组ID 
+示例：
+hadoop fs -ls /user/hadoop/file1 /user/hadoop/file2 hdfs://host:port/user/hadoop/dir1 /nonexistentfile 
+返回值：
+成功返回0，失败返回-1。 
+
+mkdir
+使用方法：hadoop fs -mkdir <paths> 
+接受路径指定的uri作为参数，创建这些目录。其行为类似于Unix的mkdir -p，它会创建路径中的各级父目录。
+
+spark-submit --class helloworld --master yarn --deploy-mode client /home/sun/work/project1.jar /input/README.txt /result
+
+示例：
+
+hadoop fs -mkdir /user/hadoop/dir1 /user/hadoop/dir2
+hadoop fs -mkdir hdfs://host1:port1/user/hadoop/dir hdfs://host2:port2/user/hadoop/dir
+返回值：
+
+成功返回0，失败返回-1。
+
+creat project
+spark count
+http://blog.csdn.net/liuzongxi/article/details/51764055
+https://www.cnblogs.com/wujiadong2014/p/6361584.html
+
+package com.liuzx.test  
+  
+import org.apache.spark.SparkConf  
+import org.apache.spark.SparkContext  
+  
+object SparkOnFile {  
+  def main(args: Array[String]) {  
+    val sparkConf = new SparkConf().setMaster("spark://OPENFIRE-DEV:7080").setAppName("spark sql hbase test");  
+    val sc = new SparkContext(sparkConf);  
+  
+    val textFile = sc.textFile("hdfs://192.168.0.108:9000/alidata/README.txt")  
+    val counts = textFile.flatMap(line => line.split(" "))  
+      .map(word => (word, 1))  
+      .reduceByKey(_ + _)  
+    counts.saveAsTextFile("hdfs://192.168.0.108:9000/alidata/word_result.txt")  
+  }  
+}  
